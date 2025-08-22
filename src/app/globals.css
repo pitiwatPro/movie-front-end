@@ -2,25 +2,90 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+
+  /* Border Radius */
+  --radius-sm: 5px;
+
+  /* Colors */
+  --primary: #db0000;
+  --secondary: #ffffff;
+  --nav: #564d4d;
+  --info: #831010;
+
+  /* Typography */
+  --font-size-sm: 22px;
+  --font-size-body: 30px;
+  --font-size-title: 40px;
+
+  /* Font Family  */
+  --font-roboto: var(--font-roboto);
+  --font-roboto-mono: var(--font-roboto-mono);
+
+  /* Font weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+}
+
+.dark {
+  --background: #000000;
+
+  /* Colors */
+  --primary: #ffffff;
+  --secondary: #010000;
+  --nav: #dadada;
+  --info: #515451;
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  /* Colors */
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-nav: var(--nav);
+  --color-info: var(--info);
+
+  /* Border Radius */
+  --radius-sm: var(--radius-sm);
+
+  /* Font weights */
+  --font-weight-normal: var(--font-weight-normal);
+  --font-weight-medium: var(--font-weight-medium);
+  --font-weight-bold: var(--font-weight-bold);
+
+  /* Font Family  */
+  --font-roboto: var(--font-roboto);
+  --font-roboto-mono: var(--font-roboto-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
+  html,
+  body,
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    height: 100%;
+    background-color: var(--background);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .text-nav {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+  }
+
+  .text-body {
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-normal);
+  }
+
+  .text-button {
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .text-button-lg {
+    font-size: var(--font-size-button);
+    font-weight: var(--font-weight-bold);
+  }
 }
