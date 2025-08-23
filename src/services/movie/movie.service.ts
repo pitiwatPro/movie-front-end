@@ -5,7 +5,7 @@ import movieApi from "../api/movie.api";
 export class MovieService implements MovieRepository {
   async getTopRatedMovies(): Promise<MovieItem[]> {
     const data = await movieApi.get("/movies/top-rated");
-    console.log("data:", data);
+
     return data.map((item: any) => {
       return new MovieItem(
         item.id,
