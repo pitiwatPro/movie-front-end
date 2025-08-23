@@ -1,8 +1,19 @@
 import { MovieRepository } from "@/core/adapters/movie.repository";
 import { MovieItem } from "@/core/models/movie-Item.model";
+import movieApi from "../api/movie.api";
 
 export class MovieService implements MovieRepository {
-  getTopRatedMovies(): Promise<MovieItem[]> {
-    throw new Error("Method not implemented.");
+  async getTopRatedMovies(): Promise<MovieItem[]> {
+    const data = await movieApi.get("/movies/top-rated");
+    console.log("data:", data);
+    return data.map((item: any) => {
+      return new MovieItem(
+        item.id,
+        item.title,
+        item.overview,
+        item.fullImage,
+        item.thumbnailImage
+      );
+    });
   }
 }

@@ -8,15 +8,14 @@ export default async function PreviewMovie(props: { previewMovie: MovieItem }) {
   const t = await getTranslations();
 
   return (
-    <div className="w-full xl:h-screen lg:overflow-hidden relative">
+    <div className="aspect-3/2 lg:aspect-auto lg:h-screen overflow-hidden relative">
       <Image
         src={previewMovie.fullImage}
         alt={previewMovie.title}
-        layout="responsive"
-        width={400}
-        height={200}
+        fill
+        style={{ objectFit: "cover" }}
         priority
-      />
+        />
 
       <div className="absolute pl-3 lg:pl-10 top-14 md:top-1/2 w-full text-primary">
         <h1 className="text-base xl:text-3xl font-bold">{t('homePage.top1')}</h1>
