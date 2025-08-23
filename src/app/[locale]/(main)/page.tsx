@@ -5,17 +5,17 @@ import { getTranslations } from "next-intl/server";
 
 export default async function Home() {
   const t = await getTranslations("movieType");
-  const topMovies = await movieUseCase.getTopRatedMovies();
-  const previewMovie = movieUseCase.randomMovie(topMovies);
+  const movieList = await movieUseCase.getTopRatedMovies();
+  const previewMovie = movieUseCase.randomMovie(movieList);
 
   return (
     <div className="h-screen">
       <PreviewMovie previewMovie={previewMovie} />
 
       <div className="relative lg:-mt-24">
-        <MovieList title={t("popular")} movies={topMovies} />
-        <MovieList title={t("action")} movies={topMovies} />
-        <MovieList title={t("comedy")} movies={topMovies} />
+        <MovieList title={t("popular")} movies={movieUseCase.shuffleMovies(movieList)} />
+        <MovieList title={t("action")} movies={movieUseCase.shuffleMovies(movieList)} />
+        <MovieList title={t("comedy")} movies={movieUseCase.shuffleMovies(movieList)} />
       </div>
     </div>
   );

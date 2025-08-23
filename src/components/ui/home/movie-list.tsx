@@ -21,7 +21,7 @@ export default function MovieList(props: {
           {movies.map((movie) => (
             <CarouselItem
               key={movie.id}
-              className="basis-1/3 md:basis-1/3 lg:basis-1/5 shadow-md hover:scale-105 duration-300"
+              className="basis-1/3 md:basis-1/3 lg:basis-1/5 shadow-md hover:shadow-none hover:scale-105 duration-300"
             >
               <div className="relative aspect-3/4 md:aspect-3/2 overflow-hidden">
                 <Image
