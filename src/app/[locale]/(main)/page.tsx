@@ -13,10 +13,20 @@ export default async function Home() {
       <PreviewMovie previewMovie={previewMovie} />
 
       <div className="relative lg:-mt-24">
-        <MovieList title={t("popular")} movies={movieUseCase.shuffleMovies(movieList)} />
-        <MovieList title={t("action")} movies={movieUseCase.shuffleMovies(movieList)} />
-        <MovieList title={t("comedy")} movies={movieUseCase.shuffleMovies(movieList)} />
+        <MovieList
+          title={t("popular")}
+          movies={movieUseCase.shuffleMovies(movieList)}
+        />
+        <MovieList
+          title={t("action")}
+          movies={movieUseCase.shuffleMovies(movieList)}
+        />
+        <MovieList
+          title={t("comedy")}
+          movies={movieUseCase.shuffleMovies(movieList)}
+        />
       </div>
+      <div className="h-8"></div>
     </div>
   );
 }
