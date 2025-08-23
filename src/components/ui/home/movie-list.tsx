@@ -12,7 +12,7 @@ export default function MovieList(props: {
 }) {
   const { title, movies } = props;
   return (
-    <>
+    <div className="text-primary">
       <h1 className="text-sm xl:text-2xl py-2 pl-2 lg:pl-10 font-medium">
         {title}
       </h1>
@@ -21,7 +21,7 @@ export default function MovieList(props: {
           {movies.map((movie) => (
             <CarouselItem
               key={movie.id}
-              className="basis-1/2 md:basis-1/3 lg:basis-1/5 shadow-md"
+              className="basis-1/2 md:basis-1/3 lg:basis-1/5 shadow-md hover:scale-105 duration-300"
             >
               <Image
                 className="w-full"
@@ -34,6 +34,6 @@ export default function MovieList(props: {
           ))}
         </CarouselContent>
       </Carousel>
-    </>
+    </div>
   );
 }

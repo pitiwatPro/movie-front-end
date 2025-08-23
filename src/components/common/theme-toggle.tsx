@@ -33,7 +33,7 @@ export function ThemeToggle() {
 const ThemeIcon = (props: { path: string }) => {
   const { path } = props;
   return (
-    <div className="relative w-5 h-5">
+    <div className="relative w-5 h-5 md:w-7 md:h-7">
       <Image src={path} alt="theme icon" fill objectFit="contain" priority />
     </div>
   );

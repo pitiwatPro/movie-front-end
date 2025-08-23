@@ -9,8 +9,8 @@
   /* Colors */
   --primary: #db0000;
   --secondary: #ffffff;
-  --nav: #564d4d;
-  --info: #831010;
+  --nav: #f7eeee;
+  --info: rgb(235, 223, 223);
 
   /* Font Family  */
   --font-roboto: var(--font-roboto);

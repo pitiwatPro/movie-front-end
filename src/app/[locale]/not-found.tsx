@@ -10,13 +10,10 @@ export default function NotFound() {
           width={300}
           height={75}
         />
-        <div className="mt-6"></div>
-        <h1 className="text-4xl font-bold text-primary">
-          404 - Page Not Found
-        </h1>
-        <p className="text-primary">
-          The page you are looking for does not exist.
-        </p>
+        <div className="mt-6 text-center text-primary">
+          <h1 className="text-4xl font-bold">404 - Page Not Found</h1>
+          <p className="mt-3">The page you are looking for does not exist.</p>
+        </div>
       </div>
     </div>
   );
