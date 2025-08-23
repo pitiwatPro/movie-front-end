@@ -1,9 +1,12 @@
 import Image from "next/image";
 import { Button } from "@/components/common/button";
 import { MovieItem } from "@/core/models/movie-Item.model";
+import { getTranslations } from "next-intl/server";
 
-export default function PreviewMovie(props: { previewMovie: MovieItem }) {
+export default async function PreviewMovie(props: { previewMovie: MovieItem }) {
   const { previewMovie } = props;
+  const t = await getTranslations();
+
   return (
     <div className="w-full xl:h-screen lg:overflow-hidden relative">
       <Image
@@ -16,7 +19,7 @@ export default function PreviewMovie(props: { previewMovie: MovieItem }) {
       />
 
       <div className="absolute pl-3 lg:pl-10 top-14 md:top-1/2 w-full text-primary">
-        <h1 className="text-base xl:text-3xl font-bold">#1 TV Shows today</h1>
+        <h1 className="text-base xl:text-3xl font-bold">{t('homePage.top1')}</h1>
         <p className="text-sm xl:text-2xl md:w-1/2 line-clamp-3 mt-2">
           {previewMovie.overview}
         </p>
@@ -26,14 +29,14 @@ export default function PreviewMovie(props: { previewMovie: MovieItem }) {
             variant="default"
             size="lg"
           >
-            Play
+            {t("button.play")}
           </Button>
           <Button
             className="mt-6 text-primary bg-info hover:scale-105 hover:bg-info duration-300"
             variant="default"
             size="lg"
           >
-            More Info
+            {t("button.info")}
           </Button>
         </div>
       </div>

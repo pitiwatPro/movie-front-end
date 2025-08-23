@@ -10,6 +10,7 @@ import {
   NavigationMenuTrigger,
 } from "./navigation-menu";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 const menuItems = [
   { key: "home", label: "Home", href: "/" },
@@ -39,6 +40,8 @@ export function Menu() {
 
 export function MenuDesktop() {
   const pathname = usePathname();
+  const t = useTranslations("menu");
+
   return (
     <div>
       <ul className="flex items-center text-sm gap-4">
@@ -50,7 +53,7 @@ export function MenuDesktop() {
                 "text-primary": pathname === item.href,
               })}
             >
-              {item.label}
+              {t(item.key)}
             </Link>
           </li>
         ))}
@@ -61,6 +64,7 @@ export function MenuDesktop() {
 
 export function MenuMobile() {
   const pathname = usePathname();
+  const t = useTranslations("menu");
 
   return (
     <NavigationMenu>
@@ -79,7 +83,7 @@ export function MenuMobile() {
                     "text-primary": pathname === item.href,
                   })}
                 >
-                  <Link href={item.href}>{item.label}</Link>
+                  <Link href={item.href}> {t(item.key)}</Link>
                 </NavigationMenuLink>
               ))}
             </div>

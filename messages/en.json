@@ -1,6 +1,26 @@
 {
-  "HomePage": {
-    "title": "Hello world!",
-    "about": "Go to the about page"
+  "menu": {
+    "home": "Home",
+    "tvShows": "TV Shows",
+    "movies": "Movies",
+    "myList": "My List",
+    "newAndPopular": "New & Popular",
+    "browseByLanguages": "Browse by Languages"
+  },
+  "button": {
+    "info": "More Info",
+    "play": "Play"
+  },
+  "movieType": {
+    "popular": "Popular on Netflix",
+    "action": "Action Movies",
+    "comedy": "Comedy Movies"
+  },
+  "notFoundPage": {
+    "title": "404 - Page Not Found",
+    "description": "Sorry, the page you are looking for does not exist."
+  },
+  "homePage": {
+    "top1": "#1 TV Show Today"
   }
 }

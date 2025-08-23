@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ThemeToggle } from "./theme-toggle";
 import { Menu } from "./menu";
+import LangToggle from "./lang-toggle";
 
 export function Navbar() {
   return (
@@ -17,7 +18,8 @@ export function Navbar() {
         </div>
         <Menu />
       </div>
-      <div>
+      <div className="flex items-center gap-3">
+        <LangToggle />
         <ThemeToggle />
       </div>
     </div>
