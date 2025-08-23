@@ -14,6 +14,7 @@ export default async function PreviewMovie(props: { previewMovie: MovieItem }) {
         alt={previewMovie.title}
         fill
         style={{ objectFit: "cover" }}
+        sizes="(max-width: 768px) 100vw, 50vw"
         priority
       />
 

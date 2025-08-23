@@ -28,7 +28,8 @@ export default function MovieList(props: {
                   src={movie.thumbnailImage}
                   alt={movie.title}
                   fill
-                  objectFit="cover"
+                  style={{ objectFit: "cover" }}
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
             </CarouselItem>

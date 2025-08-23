@@ -12,7 +12,8 @@ export function Navbar() {
             src="/images/netflix.png"
             alt="netflix logo"
             fill
-            objectFit="contain"
+            style={{ objectFit: "contain" }}
+            sizes="(max-width: 768px) 100vw, 50vw"
             priority
           />
         </div>
