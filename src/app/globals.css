@@ -12,19 +12,9 @@
   --nav: #564d4d;
   --info: #831010;
 
-  /* Typography */
-  --font-size-sm: 22px;
-  --font-size-body: 30px;
-  --font-size-title: 40px;
-
   /* Font Family  */
   --font-roboto: var(--font-roboto);
   --font-roboto-mono: var(--font-roboto-mono);
-
-  /* Font weights */
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-bold: 700;
 }
 
 .dark {
@@ -46,17 +36,12 @@
   --color-nav: var(--nav);
   --color-info: var(--info);
 
-  /* Border Radius */
-  --radius-sm: var(--radius-sm);
-
-  /* Font weights */
-  --font-weight-normal: var(--font-weight-normal);
-  --font-weight-medium: var(--font-weight-medium);
-  --font-weight-bold: var(--font-weight-bold);
-
   /* Font Family  */
   --font-roboto: var(--font-roboto);
   --font-roboto-mono: var(--font-roboto-mono);
+
+  /* Border Radius */
+  --radius-sm: var(--radius-sm);
 }
 
 @layer base {
@@ -65,27 +50,5 @@
   :root {
     height: 100%;
     background-color: var(--background);
-  }
-}
-
-@layer components {
-  .text-nav {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-normal);
-  }
-
-  .text-body {
-    font-size: var(--font-size-body);
-    font-weight: var(--font-weight-normal);
-  }
-
-  .text-button {
-    font-size: var(--font-size-body);
-    font-weight: var(--font-weight-medium);
-  }
-
-  .text-button-lg {
-    font-size: var(--font-size-button);
-    font-weight: var(--font-weight-bold);
   }
 }

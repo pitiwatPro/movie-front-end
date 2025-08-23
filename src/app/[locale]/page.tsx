@@ -1,16 +1,21 @@
-import { getTranslations } from "next-intl/server";
-import { ThemeToggle } from "../../components/common/theme-toggle";
+import MovieList from "@/components/ui/home/movie-list";
+import PreviewMovie from "@/components/ui/home/preview-movie";
+import { movieUseCase } from "@/core/usecases/movie.usecase";
 
 export default async function Home() {
-  // deley
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-
-  const t = await getTranslations("HomePage");
+  const topMovies = await movieUseCase.getTopRatedMovies();
+  const previewMovie = topMovies[0];
+  const topMoviesList = topMovies.slice(1);
 
   return (
-    <div>
-      <h1>{t("title")}</h1>
-      <ThemeToggle />
+    <div className="h-screen">
+      <PreviewMovie previewMovie={previewMovie} />
+
+      <div className="relative lg:-mt-24">
+        <MovieList title="Popular on Netflix" movies={topMoviesList} />
+        <MovieList title="Action Movies" movies={topMoviesList} />
+        <MovieList title="Comedy Movies" movies={topMoviesList} />
+      </div>
     </div>
   );
 }
