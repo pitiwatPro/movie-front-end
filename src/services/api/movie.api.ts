@@ -1,9 +1,12 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-
 interface MovieApiResponse<T = any> {
   data: T | null;
   error: MovieApiError | null;
 }
+
+interface FetchConfig extends RequestInit {
+  timeout?: number;
+}
+
 interface MovieApiError {
   statusCode: number;
   message: string;
@@ -13,148 +16,156 @@ interface MovieApiError {
 }
 
 class MovieApi {
-  private client: AxiosInstance;
+  private baseURL: string;
+  private defaultHeaders: Record<string, string>;
+  private timeout: number;
 
   constructor() {
-    this.client = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_MOVIE_API_BASE_URL || "",
-      timeout: 10000,
+    this.baseURL = process.env.NEXT_PUBLIC_MOVIE_API_BASE_URL || "";
+    this.timeout = 10000;
+    this.defaultHeaders = {
+      "Content-Type": "application/json",
+      "x-api-key": process.env.MOVIE_API_KEY || "",
+    };
+  }
+
+  private async makeRequest<T = any>(
+    url: string,
+    config?: FetchConfig
+  ): Promise<T> {
+    const fullUrl = url.startsWith("http") ? url : `${this.baseURL}${url}`;
+
+    const fetchOptions: FetchConfig = {
+      next: { revalidate: 3600 },
+      cache: "force-cache",
+      ...config,
       headers: {
-        "Content-Type": "application/json",
+        ...this.defaultHeaders,
+        ...config?.headers,
       },
-    });
+    };
 
-    this.setupInterceptors();
-  }
-
-  private setupInterceptors() {
-    this.client.interceptors.request.use(
-      (config) => {
-        return config;
-      },
-      (error) => {
-        return Promise.reject(this.handleError(error));
-      }
+    // Add timeout support
+    const controller = new AbortController();
+    const timeoutId = setTimeout(
+      () => controller.abort(),
+      config?.timeout || this.timeout
     );
+    fetchOptions.signal = controller.signal;
 
-    this.client.interceptors.response.use(
-      (response: AxiosResponse<MovieApiResponse>) => {
-        if (response.data && response.data.error) {
-          return Promise.reject(this.handleError(response.data.error));
-        }
-        return response;
-      },
-      (error) => {
-        return Promise.reject(this.handleError(error));
-      }
-    );
-  }
-
-  async get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
     try {
-      const response = await this.client.get<MovieApiResponse<T>>(url, config);
-      return response.data.data as T;
+      const response = await fetch(fullUrl, fetchOptions);
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw await this.handleHttpError(response);
+      }
+
+      const data: MovieApiResponse<T> = await response.json();
+
+      if (data.error) {
+        throw this.createApiError(data.error);
+      }
+
+      return data.data as T;
     } catch (error) {
-      throw error;
+      clearTimeout(timeoutId);
+      if (error instanceof Error && error.name === "AbortError") {
+        throw this.createApiError({
+          message: "Request timeout",
+          statusCode: 408,
+          errorCode: "REQUEST_TIMEOUT",
+        });
+      }
+
+      if (error && typeof error === "object" && "statusCode" in error) {
+        throw this.createApiError(error as MovieApiError);
+      }
+
+      throw this.createApiError();
     }
+  }
+
+  async get<T = any>(url: string, config?: FetchConfig): Promise<T> {
+    return this.makeRequest<T>(url, { method: "GET", ...config });
   }
 
   async post<T = any>(
     url: string,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: FetchConfig
   ): Promise<T> {
-    try {
-      const response = await this.client.post<MovieApiResponse<T>>(
-        url,
-        data,
-        config
-      );
-      return response.data.data as T;
-    } catch (error) {
-      throw error;
-    }
+    return this.makeRequest<T>(url, {
+      method: "POST",
+      body: data ? JSON.stringify(data) : undefined,
+      ...config,
+    });
   }
 
   async put<T = any>(
     url: string,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: FetchConfig
   ): Promise<T> {
-    try {
-      const response = await this.client.put<MovieApiResponse<T>>(
-        url,
-        data,
-        config
-      );
-      return response.data.data as T;
-    } catch (error) {
-      throw error;
-    }
+    return this.makeRequest<T>(url, {
+      method: "PUT",
+      body: data ? JSON.stringify(data) : undefined,
+      ...config,
+    });
   }
 
-  async delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    try {
-      const response = await this.client.delete<MovieApiResponse<T>>(
-        url,
-        config
-      );
-      return response.data.data as T;
-    } catch (error) {
-      throw error;
-    }
+  async delete<T = any>(url: string, config?: FetchConfig): Promise<T> {
+    return this.makeRequest<T>(url, { method: "DELETE", ...config });
   }
 
   async patch<T = any>(
     url: string,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: FetchConfig
   ): Promise<T> {
-    try {
-      const response = await this.client.patch<MovieApiResponse<T>>(
-        url,
-        data,
-        config
-      );
-      return response.data.data as T;
-    } catch (error) {
-      throw error;
-    }
+    return this.makeRequest<T>(url, {
+      method: "PATCH",
+      body: data ? JSON.stringify(data) : undefined,
+      ...config,
+    });
   }
 
   setBaseURL(baseURL: string) {
-    this.client.defaults.baseURL = baseURL;
+    this.baseURL = baseURL;
   }
 
   setHeader(key: string, value: string) {
-    this.client.defaults.headers.common[key] = value;
+    this.defaultHeaders[key] = value;
   }
 
   removeHeader(key: string) {
-    delete this.client.defaults.headers.common[key];
+    delete this.defaultHeaders[key];
   }
 
-  private createApiError(
-    errorData?: Partial<MovieApiResponse["error"]>
-  ): MovieApiError {
-    return {
-      message: errorData?.message || "Server error occurred",
-      statusCode: errorData?.statusCode || 500,
-      errorCode: errorData?.errorCode || "SERVER_ERROR",
-      timestamp: errorData?.timestamp || new Date().toISOString(),
-      path: errorData?.path || "",
-    };
-  }
-
-  private handleError(error: any): MovieApiError {
-    if (error.response && error.response.data?.error) {
-      return this.createApiError(error.response.data.error);
+  private async handleHttpError(response: Response): Promise<MovieApiError> {
+    let errorData: any;
+    try {
+      errorData = (await response.json()).error;
+    } catch {
+      errorData = { message: response.statusText };
     }
 
     return this.createApiError({
-      message: error.message,
-      errorCode: "UNKNOWN_ERROR",
+      statusCode: errorData.statusCode,
+      message: errorData.message,
+      errorCode: errorData.errorCode,
+      path: errorData.path,
     });
+  }
+
+  private createApiError(errorData?: Partial<MovieApiError>): MovieApiError {
+    return {
+      message: errorData?.message || "Unknown error occurred",
+      statusCode: errorData?.statusCode || 500,
+      errorCode: errorData?.errorCode || "UNKNOWN_ERROR",
+      timestamp: errorData?.timestamp || new Date().toISOString(),
+      path: errorData?.path || "",
+    };
   }
 }
 
