@@ -69,6 +69,7 @@ class MovieApi {
 
       return data.data as T;
     } catch (error) {
+      console.error("API Request Error:", error);
       clearTimeout(timeoutId);
       if (error instanceof Error && error.name === "AbortError") {
         throw this.createApiError({

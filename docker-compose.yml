@@ -1,0 +1,33 @@
+services:
+  frontend:
+    build: .
+    image: movie-frontend:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_MOVIE_API_BASE_URL=http://backend:3001/api
+      - MOVIE_API_KEY=movie_api_key_here
+    restart: unless-stopped
+    networks:
+      - movie-network
+
+  backend:
+    build: ../movie-back-end
+    image: movie-backend:latest
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - GLOBAL_PREFIX=api
+      - CORS_ORIGIN=http://localhost:3000
+      - CORS_METHODS=GET,HEAD,PUT,PATCH,POST,DELETE,
+      - RAPID_URL=https://streaming-availability.p.rapidapi.com
+      - API_KEY=movie_api_key_here
+      - RAPID_API_KEY=your_rapid_api_key_here
+    restart: unless-stopped
+    networks:
+      - movie-network
+
+networks:
+  movie-network:
+    driver: bridge
