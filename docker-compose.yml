@@ -6,7 +6,7 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_MOVIE_API_BASE_URL=http://backend:3001/api
-      - MOVIE_API_KEY=movie_api_key_here
+      - MOVIE_API_KEY=movie_api_key
     restart: unless-stopped
     networks:
       - movie-network
@@ -19,11 +19,9 @@ services:
     environment:
       - PORT=3001
       - GLOBAL_PREFIX=api
-      - CORS_ORIGIN=http://localhost:3000
-      - CORS_METHODS=GET,HEAD,PUT,PATCH,POST,DELETE,
       - RAPID_URL=https://streaming-availability.p.rapidapi.com
-      - API_KEY=movie_api_key_here
-      - RAPID_API_KEY=your_rapid_api_key_here
+      - API_KEY=movie_api_key
+      - RAPID_API_KEY=${RAPID_API_KEY}
     restart: unless-stopped
     networks:
       - movie-network
